@@ -9,6 +9,7 @@ export const sessionsKey = (sessionId: string) => 'sessions#' + sessionId;
 
 // Items
 export const itemsKey = (itemId: string) => 'items#' + itemId;
+export const itemsViewsKey = (itemId: string) => `items:views#${itemId}`;
 export const itemByViewsKey = () => 'items:views';
 export const itemsByEndingKey = () => 'items:endingAt';
 export const userItemsKey = (userId: string) => 'users:items:' + userId;

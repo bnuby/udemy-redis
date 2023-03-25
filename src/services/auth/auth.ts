@@ -17,7 +17,6 @@ export const signin = async (username: string, password: string): Promise<string
 		throw new Error('Username does not exist');
 	}
 
-	console.log(user, password);
 	const matches = await comparePasswords(password, user.password);
 
 	if (matches) {

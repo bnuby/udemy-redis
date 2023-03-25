@@ -14,8 +14,8 @@ Name: Redis The Complete Developer's Guide
 [x] Section 12: Practice Time with Sorted Sets!  
 [x] Section 13: From Relational Data to Redis  
 [x] Section 14: HyperLogLog Structures  
-[ ] Section 15: Storing Collections with Lists  
-[ ] Section 16: More Practice with the E-Commerce App  
+[x] Section 15: Storing Collections with Lists  
+[x] Section 16: More Practice with the E-Commerce App  
 [ ] Section 17: Extending Redis with Scripting  
 [ ] Section 18: Understanding and Solving Concurrency Issues  
 [ ] Section 19: Querying Data with RediSearch  

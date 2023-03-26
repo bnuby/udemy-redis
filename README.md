@@ -16,7 +16,7 @@ Name: Redis The Complete Developer's Guide
 [x] Section 14: HyperLogLog Structures  
 [x] Section 15: Storing Collections with Lists  
 [x] Section 16: More Practice with the E-Commerce App  
-[ ] Section 17: Extending Redis with Scripting  
+[x] Section 17: Extending Redis with Scripting  
 [ ] Section 18: Understanding and Solving Concurrency Issues  
 [ ] Section 19: Querying Data with RediSearch  
 [ ] Section 20: Search in Action  

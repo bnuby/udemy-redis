@@ -1,3 +1,4 @@
+import { createIndexes } from './create-indexes';
 import { itemByViewsKey, itemsKey, itemsViewsKey } from '$services/keys';
 import { createClient, defineScript } from 'redis';
 
@@ -13,7 +14,7 @@ const client = createClient({
 			SCRIPT: `
 				local key = KEYS[1]
 				local token = ARGV[1]
-				if redis.call('GET', key) === ARGV[1]) then
+				if redis.call('GET', key) == token then
 					return redis.call('DEL', key)
 				end
 			`,
@@ -72,12 +73,17 @@ const client = createClient({
 	}
 });
 
-// Use to test custom redis scripts
-// client.on('connect', async () => {
-// 	await client.addOneAndStore('books:count', 5);
-// 	const result = await client.get('books:count');
-// 	console.log('result', result);
-// })
+client.on('connect', async () => {
+	try {
+		await createIndexes();
+	} catch (e) {
+		console.error(e);
+	}
+	// Use to test custom redis scripts
+	// 	await client.addOneAndStore('books:count', 5);
+	// 	const result = await client.get('books:count');
+	// 	console.log('result', result);
+})
 
 client.on('error', (err) => console.error(err));
 client.connect();

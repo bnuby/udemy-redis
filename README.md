@@ -20,8 +20,8 @@ Name: Redis The Complete Developer's Guide
 [x] Section 18: Understanding and Solving Concurrency Issues  
 [x] Section 19: Querying Data with RediSearch  
 [x] Section 20: Search in Action  
-[ ] Section 21: Service Communication with Streams  
-[ ] Section 22: Bonus!  
+[x] Section 21: Service Communication with Streams  
+[x] Section 22: Bonus!  
 
 
 # create-svelte

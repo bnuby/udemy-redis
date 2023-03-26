@@ -1,3 +1,4 @@
+import { withLock } from './../redis/lock';
 import { getItem } from '$services/queries/items/items';
 import { DateTime } from 'luxon';
 import type { CreateBidAttrs, Bid } from '$services/types';
@@ -5,27 +6,27 @@ import { bidHistoryKey, itemsByPriceKey, itemsKey } from '$services/keys';
 import { client } from '$services/redis';
 
 export const createBid = async (attrs: CreateBidAttrs) => {
-	return client.executeIsolated(async (isolatedClient) => {
-		await isolatedClient.watch(itemsKey(attrs.itemId));
+	return withLock(attrs.itemId, async (lockedClient: typeof client, signal: any) => {
 		const item = await getItem(attrs.itemId);
 		if (!item) throw new Error("Item not exists");
 		if (item.price >= attrs.amount) throw new Error('Bid too low');
 		if (item.endingAt.diff(DateTime.now()).toMillis() < 0) throw new Error('Item closed to bidding');
 		const serialized = serialize(attrs.amount, attrs.createdAt.toMillis());
-
-		return isolatedClient.multi()
-			.rPush(bidHistoryKey(attrs.itemId), serialized)
-			.hSet(itemsKey(attrs.itemId), {
+		// Comment out this method, this solution is not that suitable, use Proxy to check on every client get.
+		// if (signal.expired) throw new Error('Lock expired, cant write any more data')
+		return Promise.all([
+			lockedClient.rPush(bidHistoryKey(attrs.itemId), serialized),
+			lockedClient.hSet(itemsKey(attrs.itemId), {
 				highestBidUserId: attrs.userId,
 				price: attrs.amount,
-			})
-			.zAdd(itemsByPriceKey(), {
+			}),
+			lockedClient.zAdd(itemsByPriceKey(), {
 				value: item.id,
 				score: attrs.amount
-			})
-			.hIncrBy(itemsKey(attrs.itemId), 'bids', 1)
-			.exec();
-	})
+			}),
+			lockedClient.hIncrBy(itemsKey(attrs.itemId), 'bids', 1)
+		]);
+	});
 };
 
 export const getBidHistory = async (itemId: string, offset = 0, count = 10): Promise<Bid[]> => {

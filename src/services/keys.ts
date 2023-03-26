@@ -13,6 +13,7 @@ export const itemsViewsKey = (itemId: string) => `items:views#${itemId}`;
 export const itemByViewsKey = () => 'items:views';
 export const itemsByPriceKey = () => 'items:price';
 export const itemsByEndingKey = () => 'items:endingAt';
+export const itemLockKey = (itemId: string) => 'lock:items:' + itemId;
 export const userItemsKey = (userId: string) => 'users:items:' + userId;
 export const userLikedKey = (username: string) => 'users:likes#' + username;
 export const bidHistoryKey = (itemId: string) => `history#${itemId}`;

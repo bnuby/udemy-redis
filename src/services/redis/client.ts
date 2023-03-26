@@ -8,6 +8,22 @@ const client = createClient({
 	},
 	password: process.env.REDIS_PW,
 	scripts: {
+		unlock: defineScript({
+			NUMBER_OF_KEYS: 1,
+			SCRIPT: `
+				local key = KEYS[1]
+				local token = ARGV[1]
+				if redis.call('GET', key) === ARGV[1]) then
+					return redis.call('DEL', key)
+				end
+			`,
+			transformArguments(key: string, token: string) {
+				return [key, token]
+			},
+			transformReply(replay) {
+				return replay;
+			}
+		}),
 		addOneAndStore: defineScript({
 			NUMBER_OF_KEYS: 1,
 			SCRIPT: `
